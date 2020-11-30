@@ -1,7 +1,6 @@
-# NOTE: update this with your service name
 service: step-fns-parallel
 
-# Create an optimized package for our functions 
+# Create an optimized package for our functions
 package:
   individually: true
 
@@ -9,12 +8,15 @@ plugins:
   - serverless-bundle # Package our functions with Webpack
   - serverless-offline
   - serverless-dotenv-plugin # Load .env as environment variables
+  - serverless-step-functions
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   stage: dev
   region: us-east-1
+  apiGateway:
+    shouldStartNameWithService: true
   # To load environment variables externally
   # rename env.example to .env and uncomment
   # the following line. Also, make sure to not
@@ -22,6 +24,7 @@ provider:
   #
   #environment:
   #  SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
+  timeout: 30
 
 functions:
   hello:
@@ -30,3 +33,46 @@ functions:
       - http:
           path: hello
           method: get
+  branch1:
+    handler: sf.branch1
+  branch2:
+    handler: sf.branch2
+  afterBranches:
+    handler: sf.afterBranches
+
+stepFunctions:
+  stateMachines:
+    test:
+      name: 'test'
+      definition:
+        Comment: "Testing tips-like state structure"
+        StartAt: Parallel1
+        States:
+          Parallel1:
+            Type: Parallel
+            Branches:
+              -
+                StartAt: Branch1
+                States:
+                  Branch1:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [ branch1, Arn ]
+                    TimeoutSeconds: ${self:provider.timeout}
+                    End: true
+              -
+                StartAt: Branch2
+                States:
+                  Branch2:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [ branch2, Arn ]
+                    TimeoutSeconds: ${self:provider.timeout}
+                    End: true
+            Next: AfterBranches
+          AfterBranches:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [ afterBranches, Arn ]
+            TimeoutSeconds: ${self:provider.timeout}
+            End: true

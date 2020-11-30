@@ -15,7 +15,8 @@
   "devDependencies": {
     "serverless-bundle": "3.2.0",
     "serverless-dotenv-plugin": "^2.1.1",
-    "serverless-offline": "^5.3.3"
+    "serverless-offline": "^5.3.3",
+    "serverless-step-functions": "^2.29.0"
   },
   "dependencies": {}
 }
