@@ -51,3 +51,5 @@ env.yml
 # Jetbrains IDEs
 .idea
 /setAwsProfile.sh
+/run.out
+/run.sh

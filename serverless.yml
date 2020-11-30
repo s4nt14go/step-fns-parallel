@@ -15,8 +15,6 @@ provider:
   runtime: nodejs12.x
   stage: dev
   region: us-east-1
-  apiGateway:
-    shouldStartNameWithService: true
   # To load environment variables externally
   # rename env.example to .env and uncomment
   # the following line. Also, make sure to not
@@ -24,15 +22,23 @@ provider:
   #
   #environment:
   #  SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
-  timeout: 30
+  timeout: 20
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'lambda:InvokeFunction'
+      Resource:
+        Fn::Join:
+          - ''
+          - - 'arn:aws:lambda:'
+            - Ref: AWS::Region
+            - ':'
+            - Ref: AWS::AccountId
+            - ':function:'
+            - Ref: AWS::StackName
+            - '-branch2'
 
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - http:
-          path: hello
-          method: get
   branch1:
     handler: sf.branch1
   branch2:
@@ -45,14 +51,13 @@ stepFunctions:
     test:
       name: 'test'
       definition:
-        Comment: "Testing tips-like state structure"
+        Comment: "Parallel tasks exceeding lambda limited time live"
         StartAt: Parallel1
         States:
           Parallel1:
             Type: Parallel
             Branches:
-              -
-                StartAt: Branch1
+              - StartAt: Branch1
                 States:
                   Branch1:
                     Type: Task
@@ -60,14 +65,23 @@ stepFunctions:
                       Fn::GetAtt: [ branch1, Arn ]
                     TimeoutSeconds: ${self:provider.timeout}
                     End: true
-              -
-                StartAt: Branch2
+              - StartAt: Branch2
                 States:
                   Branch2:
                     Type: Task
                     Resource:
                       Fn::GetAtt: [ branch2, Arn ]
                     TimeoutSeconds: ${self:provider.timeout}
+                    Next: Branch2isDone
+                  Branch2isDone:
+                    Type: Choice
+                    Choices:
+                    - Variable: $.done
+                      BooleanEquals: false
+                      Next: Branch2
+                    Default: Branch2end
+                  Branch2end:
+                    Type: Pass
                     End: true
             Next: AfterBranches
           AfterBranches:
