@@ -1,7 +1,7 @@
 # Run parallel tasks with Step Functions
 <br />
 <p align="center">
-  <img src="doc/graph.png" alt="Graph" />
+  <img src="doc/graph.png" />
 </p>
 
 #### Requirements
