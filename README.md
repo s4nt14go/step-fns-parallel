@@ -1,4 +1,9 @@
 # Run parallel tasks with Step Functions
+<br />
+<p align="center">
+  <img src="doc/graph.png" alt="Graph" />
+</p>
+
 #### Requirements
 * AWS CLI
 * AWS account
@@ -10,7 +15,7 @@
 ```bash
 export AWS_DEFAULT_PROFILE=<your aws profile>
 export AWS_PROFILE=$AWS_DEFAULT_PROFILE
-export AWS_REGION=<your aws region>
+export AWS_REGION=<aws region put on serverless.yml>
 ```
 `TIP` You can check your current credentials with `aws configure list` 
 * Deploy with
