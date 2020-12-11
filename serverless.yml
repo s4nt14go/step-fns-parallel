@@ -43,15 +43,35 @@ functions:
     handler: sf.branch1
   branch2:
     handler: sf.branch2
+  branch3:
+    handler: sf.branch3
+  branch4:
+    handler: sf.branch4
+  branch5:
+    handler: sf.branch5
+  branch6:
+    handler: sf.branch6
+  branch7:
+    handler: sf.branch7
+  branch8:
+    handler: sf.branch8
+  branch9:
+    handler: sf.branch9
+  branch10:
+    handler: sf.branch10
+  branch11:
+    handler: sf.branch11
   afterBranches:
     handler: sf.afterBranches
 
 stepFunctions:
   stateMachines:
-    test:
-      name: 'test'
+    parallelBatchProcessing:
+      name: parallelBatchProcessing
       definition:
-        Comment: "Parallel tasks exceeding lambda limited time live"
+        Comment: "Process batch with 10 parallel tasks, we use a lambda for each of these tasks.
+        As they may exceed the lambda timeout we asks on each lambda how much time left we have to continue processing,
+        in the case there is little time left we relaunch the lambda to renew timeout"
         StartAt: Parallel1
         States:
           Parallel1:
@@ -81,6 +101,168 @@ stepFunctions:
                       Next: Branch2
                     Default: Branch2end
                   Branch2end:
+                    Type: Pass
+                    End: true
+              - StartAt: Branch3
+                States:
+                  Branch3:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [ branch3, Arn ]
+                    TimeoutSeconds: ${self:provider.timeout}
+                    Next: Branch3isDone
+                  Branch3isDone:
+                    Type: Choice
+                    Choices:
+                      - Variable: $.done
+                        BooleanEquals: false
+                        Next: Branch3
+                    Default: Branch3end
+                  Branch3end:
+                    Type: Pass
+                    End: true
+              - StartAt: Branch4
+                States:
+                  Branch4:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [ branch4, Arn ]
+                    TimeoutSeconds: ${self:provider.timeout}
+                    Next: Branch4isDone
+                  Branch4isDone:
+                    Type: Choice
+                    Choices:
+                      - Variable: $.done
+                        BooleanEquals: false
+                        Next: Branch4
+                    Default: Branch4end
+                  Branch4end:
+                    Type: Pass
+                    End: true
+              - StartAt: Branch5
+                States:
+                  Branch5:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [ branch5, Arn ]
+                    TimeoutSeconds: ${self:provider.timeout}
+                    Next: Branch5isDone
+                  Branch5isDone:
+                    Type: Choice
+                    Choices:
+                      - Variable: $.done
+                        BooleanEquals: false
+                        Next: Branch5
+                    Default: Branch5end
+                  Branch5end:
+                    Type: Pass
+                    End: true
+              - StartAt: Branch6
+                States:
+                  Branch6:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [ branch6, Arn ]
+                    TimeoutSeconds: ${self:provider.timeout}
+                    Next: Branch6isDone
+                  Branch6isDone:
+                    Type: Choice
+                    Choices:
+                      - Variable: $.done
+                        BooleanEquals: false
+                        Next: Branch6
+                    Default: Branch6end
+                  Branch6end:
+                    Type: Pass
+                    End: true
+              - StartAt: Branch7
+                States:
+                  Branch7:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [ branch7, Arn ]
+                    TimeoutSeconds: ${self:provider.timeout}
+                    Next: Branch7isDone
+                  Branch7isDone:
+                    Type: Choice
+                    Choices:
+                      - Variable: $.done
+                        BooleanEquals: false
+                        Next: Branch7
+                    Default: Branch7end
+                  Branch7end:
+                    Type: Pass
+                    End: true
+              - StartAt: Branch8
+                States:
+                  Branch8:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [ branch8, Arn ]
+                    TimeoutSeconds: ${self:provider.timeout}
+                    Next: Branch8isDone
+                  Branch8isDone:
+                    Type: Choice
+                    Choices:
+                      - Variable: $.done
+                        BooleanEquals: false
+                        Next: Branch8
+                    Default: Branch8end
+                  Branch8end:
+                    Type: Pass
+                    End: true
+              - StartAt: Branch9
+                States:
+                  Branch9:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [ branch9, Arn ]
+                    TimeoutSeconds: ${self:provider.timeout}
+                    Next: Branch9isDone
+                  Branch9isDone:
+                    Type: Choice
+                    Choices:
+                      - Variable: $.done
+                        BooleanEquals: false
+                        Next: Branch9
+                    Default: Branch9end
+                  Branch9end:
+                    Type: Pass
+                    End: true
+              - StartAt: Branch10
+                States:
+                  Branch10:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [ branch10, Arn ]
+                    TimeoutSeconds: ${self:provider.timeout}
+                    Next: Branch10isDone
+                  Branch10isDone:
+                    Type: Choice
+                    Choices:
+                      - Variable: $.done
+                        BooleanEquals: false
+                        Next: Branch10
+                    Default: Branch10end
+                  Branch10end:
+                    Type: Pass
+                    End: true
+              - StartAt: Branch11
+                States:
+                  Branch11:
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [ branch11, Arn ]
+                    TimeoutSeconds: ${self:provider.timeout}
+                    Next: Branch11isDone
+                  Branch11isDone:
+                    Type: Choice
+                    Choices:
+                      - Variable: $.done
+                        BooleanEquals: false
+                        Next: Branch11
+                    Default: Branch11end
+                  Branch11end:
                     Type: Pass
                     End: true
             Next: AfterBranches
