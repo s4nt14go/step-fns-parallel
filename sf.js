@@ -1,50 +1,38 @@
 import 'source-map-support/register';
 const Promise = require('bluebird');
 
-/* Input data to step function
+/* Example input data to step function
 {
     "branch2": {
-      "rangeToProcess": [0, 30]
+      "rangeToProcess": [200, 230]
     },
     "branch3": {
-      "rangeToProcess": [31, 60]
+      "rangeToProcess": [300, 360]
     },
     "branch4": {
-      "rangeToProcess": [61, 90]
+      "rangeToProcess": [400, 490]
     },
     "branch5": {
-      "rangeToProcess": [91, 120]
+      "rangeToProcess": [500, 530]
     },
     "branch6": {
-      "rangeToProcess": [121, 150]
+      "rangeToProcess": [600, 630]
     },
     "branch7": {
-      "rangeToProcess": [151, 180]
+      "rangeToProcess": [700, 730]
     },
     "branch8": {
-      "rangeToProcess": [181, 210]
+      "rangeToProcess": [800, 830]
     },
     "branch9": {
-      "rangeToProcess": [211, 240]
+      "rangeToProcess": [900, 930]
     },
     "branch10": {
-      "rangeToProcess": [241, 270]
+      "rangeToProcess": [1000, 1030]
     },
     "branch11": {
-      "rangeToProcess": [271, 300]
+      "rangeToProcess": [1100, 1130]
     }
-}
-{
-    "branch2": [0, 30],
-    "branch3": [31, 60],
-  	"branch4": [61, 90],
-    "branch5": [91, 120],
-    "branch6": [121, 150],
-    "branch7": [151, 180],
-    "branch8": [181, 210],
-    "branch9": [241, 270],
-    "branch10": [271, 300],
-    "branch11": [301, 330],
 }*/
 
 export const branch1 = async (event, context) => {
