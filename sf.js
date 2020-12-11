@@ -4,34 +4,10 @@ const Promise = require('bluebird');
 /* Example input data to step function
 {
     "branch2": {
-      "rangeToProcess": [200, 230]
+      "rangeToProcess": [200, 215]
     },
     "branch3": {
-      "rangeToProcess": [300, 360]
-    },
-    "branch4": {
-      "rangeToProcess": [400, 490]
-    },
-    "branch5": {
-      "rangeToProcess": [500, 530]
-    },
-    "branch6": {
-      "rangeToProcess": [600, 630]
-    },
-    "branch7": {
-      "rangeToProcess": [700, 730]
-    },
-    "branch8": {
-      "rangeToProcess": [800, 830]
-    },
-    "branch9": {
-      "rangeToProcess": [900, 930]
-    },
-    "branch10": {
-      "rangeToProcess": [1000, 1030]
-    },
-    "branch11": {
-      "rangeToProcess": [1100, 1130]
+      "rangeToProcess": [300, 325]
     }
 }*/
 
@@ -42,14 +18,6 @@ export const branch1 = async (event, context) => {
 
 export const branch2 = async (event, context) => await worker(event, context);
 export const branch3 = async (event, context) => await worker(event, context);
-export const branch4 = async (event, context) => await worker(event, context);
-export const branch5 = async (event, context) => await worker(event, context);
-export const branch6 = async (event, context) => await worker(event, context);
-export const branch7 = async (event, context) => await worker(event, context);
-export const branch8 = async (event, context) => await worker(event, context);
-export const branch9 = async (event, context) => await worker(event, context);
-export const branch10 = async (event, context) => await worker(event, context);
-export const branch11 = async (event, context) => await worker(event, context);
 
 const worker = async (event, context) => {
   console.log('event', event);
@@ -104,7 +72,7 @@ const worker = async (event, context) => {
 
 export const afterBranches = async (event, context) => {
   console.log("event", event);
-  // const [branch1, branch2] = event;
+  // const [branch1, branch2, branch3] = event;
   return event;
 };
 

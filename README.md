@@ -1,12 +1,31 @@
-# Run parallel tasks longer than Lambda time limited life using Step Functions
+# Run parallel tasks longer than Lambda limited time life using Step Functions
+
+
+The state machine has 4 parallel branches:
+* branch1: Outputs a message after 6s
+* branch2 and branch3: Simulate the processing of a range of items `rangeToProcess`, each of them takes 1s to complete and processing the whole `rangeToProcess` exceeds the lambda limited time life. For this demo a timeout of 20s was set to lambdas, so before processing an item, lambda asks how much time is left from the 20s and in the case that is less than a `marginTime` (10s), the lambda will stop processing and return ` { done: false, nextId: <number> } ` so the following Choice state restarts the lambda from `nextId`. Once all the items were processed, lambda returns `{ done: true }` so Choice directs to end the state machine.
+
+In example if we use as input for the step function this object:
+```json
+{
+    "branch2": {
+      "rangeToProcess": [200, 215]
+    },
+    "branch3": {
+      "rangeToProcess": [300, 325]
+    }
+}
+```
+This is how it looks like an intermediate input for branch2:
 <br />
 <p align="center">
-  <img src="doc/graph.png" />
+  <img src="doc/branch2intermediateInput.png" />
 </p><br />
-
-The state machine process 30 items, every item takes 1s to complete, but the lambda timeout is set to 20s (purposely so this PoC doesn't take so much time).<br /><br />
-After each item is processed, lambda asks how much time is left from the 20s, if it's left less than 10s it will stop processing and return ` { done: false, nextId: <number> } ` so the following Choice state restarts the lambda from `nextId`.<br /><br />
-Once all the 30 items were processed, lambda returns `{ done: true }` so Choice directs to end the state machine.  
+While the whole excecution behaves like this:
+<br />
+<p align="center">
+  <img src="doc/stepFunctionsParallel.gif" />
+</p><br />
 
 #### Requirements
 * AWS CLI
@@ -26,9 +45,11 @@ export AWS_REGION=<aws region put on serverless.yml>
 ```bash
 sls deploy
 ```
-* Execute state machine. `data` parameter is optional, if it's not sent it will process from item 0 or specify `nextId` choosing between 1 and 30.
+* You can execute the step function with input data from the command line using for example:
 ```bash
-sls invoke stepf --name test --data '{"nextId": <number>}'
+sls invoke stepf --name parallelBatchProcessing --data '{ "branch2": { "rangeToProcess": [200, 215] }, "branch3": { "rangeToProcess": [300, 325] }}'
 ```
+...or execute the step function from AWS console GUI to see how the graph changes.
+
 ---
 Starting repo: [Serverless Node.js Starter](https://github.com/AnomalyInnovations/serverless-nodejs-starter)
