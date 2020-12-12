@@ -21,7 +21,7 @@ This is how it looks like an intermediate input for branch2:
 <p align="center">
   <img src="doc/branch2intermediateInput.png" />
 </p><br />
-While the whole excecution behaves like this:
+While the whole excecution behaves like this animation:
 <br />
 <p align="center">
   <img src="doc/stepFunctionsParallel.gif" />
