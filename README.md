@@ -2,8 +2,8 @@
 
 
 The state machine has 3 parallel branches:
-* branch1: Outputs a message after 6s
-* branch2 and branch3: Simulate the processing of a range of items `rangeToProcess`, each of them takes 1s to complete and processing the whole `rangeToProcess` exceeds the lambda limited time life. For this demo a timeout of 20s was set to lambdas, so before processing an item, lambda asks how much time is left from the 20s and in the case that is less than a `marginTime` (10s), the lambda will stop processing and return ` { done: false, nextId: <number> } ` so the following Choice state restarts the lambda from `nextId` renewing the timeout. Once all the items were processed, lambda returns `{ done: true }` so Choice directs to end the state machine.
+* Branch1: Outputs a message after 6s
+* Branch2 and Branch3: Simulate the processing of a range of items `rangeToProcess`, each of them takes 1s to complete and processing the whole `rangeToProcess` exceeds the lambda limited time life. For this demo a timeout of 20s was set to lambdas, so before processing an item, lambda asks how much time is left from the 20s and in the case that is less than a `marginTime` (10s), the lambda will stop processing and return ` { done: false, nextId: <number> } ` so the following Choice state restarts the lambda from `nextId` renewing the timeout. Once all the items were processed, lambda returns `{ done: true }` so Choice directs to end the state machine.
 
 For example, if we use as input for the step function this object:
 ```json
@@ -16,7 +16,7 @@ For example, if we use as input for the step function this object:
     }
 }
 ```
-This is how it looks like an intermediate input for branch2:
+This is how an intermediate input for Branch2 looks like:
 <br />
 <p align="center">
   <img src="doc/branch2intermediateInput.png" />
