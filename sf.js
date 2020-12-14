@@ -26,11 +26,9 @@ const worker = async (event, context) => {
 
   const { rangeToProcess } = event[handlerName];
 
-  // const endId = 30;
   const endId = rangeToProcess[1];
   const marginTime = 10000;
   const taskTakes = 1000;
-  // let nextId = event.nextId || 0;
   let nextId = event.nextId || rangeToProcess[0];
 
   let remainingTime;
