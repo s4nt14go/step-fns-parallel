@@ -1,4 +1,4 @@
-# Step Functions to process tasks longer than Lambda limited time life
+# Step Functions to process tasks longer than Lambda limited time life 
 
 
 The state machine has 3 parallel branches:
